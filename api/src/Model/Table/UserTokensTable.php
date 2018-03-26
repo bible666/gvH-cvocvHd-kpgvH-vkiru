@@ -11,7 +11,7 @@ use Cake\Validation\Validator;
  * 
  */
 
-class UsersTable extends Table
+class UserTokensTable extends Table
 {
     /**
      * Initialize method
@@ -23,24 +23,13 @@ class UsersTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('users');
-        //$this->setDisplayField('id');
+        $this->setTable('user_tokens');
         $this->setPrimaryKey('id');
 
-        
-
-       /*  $this->belongsTo('Hospitals', [
-            'foreignKey' => 'hospital_id',
+        $this->belongsTo('Users',[
+            'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Patients', [
-            'foreignKey' => 'patient_id',
-            'joinType' => 'INNER'
-        ]);
-        $this->belongsTo('TreatingPatients', [
-            'foreignKey' => 'treating_patient_id',
-            'joinType' => 'INNER'
-        ]); */
     }
 }
  ?>
