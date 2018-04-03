@@ -6,7 +6,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
 
 // src/Controller/UsersController.php
-class UsersController extends AppController
+class UsersController extends O001Controller
 {
     
     public function index()
@@ -20,6 +20,33 @@ class UsersController extends AppController
     }
 
     //-------------------------------------------------------
+    //Function Name : checkUserPermission
+    //Desction : ตรวจสอบสิทธิการใช้งานของ User ว่าสามารถเข้าใช้งาน
+    //           หน้า Page นั้น ๆ ได้หรือเปล่า
+    //-------------------------------------------------------
+    // Input
+    // - token : for check user [ send by http header ]
+    // - menu_id : selected menu [ send by JSON ]
+    //-------------------------------------------------------
+    // Ouptput
+    // - checkStatus : return true if ok and false if NG
+    //-------------------------------------------------------
+    public function checkUserPermission(){
+        //Declare Valiable
+
+        //Check Input Method
+        if (!$this->request->is('post'))
+        {
+            return $this->response->withStatus(405);
+        }
+
+        //Import Table
+
+        //Get Token From Header
+
+    }
+
+    //-------------------------------------------------------
     //Function Name : getMenu
     //Desction : get Menu data for user group
     //-------------------------------------------------------
@@ -30,28 +57,38 @@ class UsersController extends AppController
     // - menuData
     //-------------------------------------------------------
     public function getMenu(){
+        //Declare Valiable
+        $user_group_id = -1;
+
         if (!$this->request->is('post'))
         {
             return $this->response->withStatus(405);
         }
 
         //Import table
-        $usersTable = TableRegistry::get('users');
-        $userTokensTable = TableRegistry::get('userTokens');
+        $menuesTable = TableRegistry::get('menues');
+        $menuControlsTable = TableRegistry::get('menuControls');
 
+        //Get Token From Header
         $token = $this->request->header('X-CSRF-Token');
         
         //Check Token from DB
-        $tokenData = $userTokensTable->find()
-                    ->where(['token' => $token,'status' => 1])
-                    ->contain('Users')
-                    ->first();
-        debug($tokenData->user->user_group_id);
-        if (!isset($tokenData)){
+        $userData = $this->checkToken($token);
+        
+        if (!$userData){
             return $this->response->withStatus(401);
+        }else{
+            $user_group_id = $userData->user_group_id;
         }
 
-        $jsonData = $this->request->input('json_decode');
+        //Pass Check Token
+        //Get Menu Data
+        $menuData = $menuControlsTable->find()
+                    ->where(['user_group_id' => $user_group_id])
+                    ->contain('Menues');
+        
+        $this->set(compact('menuData'));
+        $this->set('_serialize', ['menuData']);
     }
 
     //-------------------------------------------------------
