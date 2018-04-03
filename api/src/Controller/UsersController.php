@@ -41,9 +41,37 @@ class UsersController extends O001Controller
         }
 
         //Import Table
+        $menuControlsTable = TableRegistry::get('menuControls');
 
         //Get Token From Header
+        $token = $this->request->header('X-CSRF-Token');
 
+        //Check Token from DB
+        $userData = $this->checkToken($token);
+        
+        if (!$userData){
+            //Token Error
+            return $this->response->withStatus(401);
+        }
+
+        //Get JSON Data
+        $jsonData = $this->request->input('json_decode');
+        //$userData->user_group_id
+        //debug($userData);
+        //$Data = $jsonData->menu_id;
+        //return data
+
+        $MenuPermisstion = $menuControlsTable->find()
+                ->where(['company_id' => $userData->company_id,'user_group_id' => $userData->user_group_id,'menu_id'=>$jsonData->menu_id])
+                ->first();
+
+        if (!isset($MenuPermisstion)){
+            return $this->response->withStatus(401);
+        }
+
+        //CheckStatus
+        $this->set(compact('MenuPermisstion'));
+        $this->set('_serialize', ['MenuPermisstion']);
     }
 
     //-------------------------------------------------------
