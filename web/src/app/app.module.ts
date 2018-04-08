@@ -12,6 +12,7 @@ import { AuthGuard } from './shared';
 
 //Import My File
 import { MyHttpInterceptor } from './service/my-http-interceptor';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
@@ -33,6 +34,8 @@ export function createTranslateLoader(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
+        FormsModule,
+        ReactiveFormsModule,
         AppRoutingModule
     ],
     declarations: [AppComponent],

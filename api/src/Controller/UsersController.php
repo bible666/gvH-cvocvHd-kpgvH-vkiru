@@ -11,6 +11,10 @@ class UsersController extends O001Controller
     
     public function index()
     {
+        if (!$this->request->is('post'))
+        {
+            return $this->response->withStatus(405);
+        }
         $users = $this->request->header('X-CSRF-Token');
  
         $this->set(compact('users'));
