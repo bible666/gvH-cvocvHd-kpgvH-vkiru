@@ -8,6 +8,21 @@ use Cake\Utility\Text;
 // src/Controller/UsersController.php
 class O001Controller extends AppController
 {
+    /**
+     * Initialization hook method.
+     *
+     * Use this method to add common initialization code like loading components.
+     *
+     * e.g. `$this->loadComponent('Security');`
+     *
+     * @return void
+     */
+    public function initialize()
+    {
+        parent::initialize();
+
+       
+    }
     
     //-------------------------------------------------------
     //Function Name : checkToken

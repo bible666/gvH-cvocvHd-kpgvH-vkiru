@@ -4,7 +4,7 @@ import { routerTransition } from '../router.animations';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl, Validator, Validators } from '@angular/forms';
 import { environment } from "../../environments/environment";
-import { UserDataService } from '../service/userData.service';
+import { UserDataService, MenuData } from '../service/userData.service';
 
 @Component({
     selector: 'app-login',
@@ -43,8 +43,7 @@ export class LoginComponent implements OnInit {
             login : this.username.value,
             password : this.password.value
         };
-        //localStorage.setItem('token','dddddddfdfff');
-        console.log(JSON.stringify(post));
+        //console.log(JSON.stringify(post));
         this.http.post<myData>(
             environment.apiUrl + 'Users/login.json',
             JSON.stringify(post)
@@ -52,10 +51,18 @@ export class LoginComponent implements OnInit {
             //let t = data.token;
             //alert(data.token);
             this.userService.setUser(data.usersData.company_id, data.usersData.id,data.usersData.user_name,data.token);
-            localStorage.setItem('isLoggedin', 'true');
+
+            //Get Menu Data <MenuData>
+            this.http.post(
+                environment.apiUrl + 'Users/.json',
+                JSON.stringify(post)
+            ).subscribe(data=>{
+                console.log(data);
+            },error=>{});
+            //localStorage.setItem('isLoggedin', 'true');
             
             this.router.navigate(['/dashboard']);
-            console.log(this.userService.getUserToken());
+            //console.log(this.userService.getUserToken());
         },error =>{
             //console.log(error.status);
             alert('ng');

@@ -6,8 +6,23 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
 
 // src/Controller/UsersController.php
-class UsersController extends O001Controller
+class UsersController extends AppController
 {
+    /**
+     * Initialization hook method.
+     *
+     * Use this method to add common initialization code like loading components.
+     *
+     * e.g. `$this->loadComponent('Security');`
+     *
+     * @return void
+     */
+    public function initialize()
+    {
+        parent::initialize();
+
+       
+    }
     
     public function index()
     {
@@ -108,19 +123,55 @@ class UsersController extends O001Controller
         $userData = $this->checkToken($token);
         
         if (!$userData){
-            return $this->response->withStatus(401);
+            return $this->response->withStatus(401,$token);
         }else{
             $user_group_id = $userData->user_group_id;
         }
 
         //Pass Check Token
         //Get Menu Data
-        $menuData = $menuControlsTable->find()
+        $menuDbDatas = $menuControlsTable->find()
                     ->where(['user_group_id' => $user_group_id])
-                    ->contain('Menues');
+                    ->contain('Menues')
+                    ->order(['MENUES.seq_number'=>'ASC']);
         
-        $this->set(compact('menuData'));
-        $this->set('_serialize', ['menuData']);
+        
+        
+        $menuDatas = $this->createMenuArr($menuDbDatas,0);
+        
+        $this->set(compact('menuDatas'));
+        $this->set('_serialize', ['menuDatas']);
+    }
+    
+    private function createMenuArr($menuDbDatas,$parentMenuId){
+        //debug('Start loop'+$parentMenuId);
+        $chileMenu = [];
+        //debug($parentMenuId);
+
+        $localArr = [];
+        foreach ( $menuDbDatas as $menuDbData){
+            if($menuDbData['menues']['parent_menu_id'] == $parentMenuId ) {
+                array_push($localArr,$menuDbData);
+            }
+        }
+        foreach ( $localArr as $menuDbData){
+            //debug($menuDbData['menues']['id']);
+            //debug($menuDbData['menues']['title_local']);
+            //debug($menuDbData['menues']['parent_menu_id']);
+            
+            $menu = new MenuData();
+            $menu->menuID = $menuDbData['menues']['id'];
+            $menu->companyID = $menuDbData['menues']['company_id'];
+            $menu->titleLocal = $menuDbData['menues']['title_local'];
+            $menu->seqNumber = $menuDbData['menues']['seq_number'];
+            $menu->urlPath = $menuDbData['menues']['url_path'];
+            $menu->childMenu = $this->createMenuArr($menuDbDatas,$menu->menuID);
+            //debug($menu);
+            array_push($chileMenu,$menu);
+            
+        }
+        //debug('End loop');
+        return $chileMenu;
     }
 
     //-------------------------------------------------------
@@ -137,6 +188,7 @@ class UsersController extends O001Controller
     //-------------------------------------------------------
     public function login()
     {
+        
         if (!$this->request->is('post'))
         {
             return $this->response->withStatus(405);
@@ -147,7 +199,7 @@ class UsersController extends O001Controller
             return $this->response->withStatus(400);
         }
 
-        $users = $this->request->header('X-CSRF-Token');
+        //$users = $this->request->header('X-CSRF-Token');
         $token = Text::uuid();
 
         //Import table
@@ -185,8 +237,20 @@ class UsersController extends O001Controller
         $this->set(compact('usersData'));
         $this->set(compact('token'));
         $this->set('_serialize', ['usersData','token']);
+        
+    
     }
 
    
+}
+
+class MenuData{
+    public $menuID;
+    public $companyID;
+    public $titleLocal;
+    public $seqNumber;
+    public $urlPath;
+    public $childMenu = [];
+
 }
 ?>
