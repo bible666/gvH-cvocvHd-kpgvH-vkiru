@@ -12,8 +12,10 @@
                             class="form-control input-underline input-lg" 
                             id="username" placeholder="user name">
                         <div *ngIf="username.touched && username.invalid" class="alert alert-danger">
+                            <!--
                             <div *ngIf="username.errors.required">User name is required.</div>
                             <div *ngIf="username.errors.minlength">User name should be minimum {{ username.errors.minlength.requiredLength }}</div>
+                            -->
                         </div>
                     </div>
 
@@ -27,7 +29,7 @@
                         </div>
                     </div>
                 </div>
-                <a class="btn rounded-btn" [routerLink]="['/dashboard']" (click)="onLoggedin()"> Log in </a>
+                <a class="btn rounded-btn"  (click)="onLoggedin()"> Log in </a>
                 <!--
                 &nbsp;
                 <a class="btn rounded-btn" [routerLink]="['/signup']">Register</a>

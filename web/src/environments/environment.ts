@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  apiUrl: "http://localhost:8888/max/api/"
+  apiUrl: "http://localhost/max_mrp/api/"
 };

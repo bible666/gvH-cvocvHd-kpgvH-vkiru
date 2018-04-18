@@ -2,6 +2,13 @@
 
 export class UserDataService{
     private user : UserData;
+    
+    getMenu():MenuData{
+        let myMenu = localStorage.getItem('menu');
+        let ret : MenuData = JSON.parse(myMenu);
+        console.log(ret);
+        return ret;
+    }
 
     setUser(company_id:number,id : number,name : string,token : string){
         this.user = new UserData();
@@ -22,7 +29,7 @@ export class UserDataService{
     }
 
     getUserToken():string{
-        return this.user.token;
+        return localStorage.getItem('token');
     }
 }
 

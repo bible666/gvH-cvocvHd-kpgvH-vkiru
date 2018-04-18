@@ -35,7 +35,9 @@ export class LoginComponent implements OnInit {
         return this.formLogin.get('password');
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+
+    }
 
     onLoggedin() {
         //alert(this.username.value);
@@ -48,24 +50,32 @@ export class LoginComponent implements OnInit {
             environment.apiUrl + 'Users/login.json',
             JSON.stringify(post)
         ).subscribe(data=>{
-            //let t = data.token;
-            //alert(data.token);
+
             this.userService.setUser(data.usersData.company_id, data.usersData.id,data.usersData.user_name,data.token);
+
+            let post = { 
+                token : data.token
+            };
 
             //Get Menu Data <MenuData>
             this.http.post(
-                environment.apiUrl + 'Users/.json',
+                environment.apiUrl + 'Users/getMenu.json',
                 JSON.stringify(post)
             ).subscribe(data=>{
-                console.log(data);
+                var myJSON = JSON.stringify(data);
+                //console.log(myJSON);
+                localStorage.setItem('isLoggedin', 'true');
+                localStorage.setItem('menu', myJSON);
+                //console.log(this.userService.getMenu());
+                this.router.navigate(['/dashboard']);
             },error=>{});
-            //localStorage.setItem('isLoggedin', 'true');
+            //
             
-            this.router.navigate(['/dashboard']);
+            //
             //console.log(this.userService.getUserToken());
         },error =>{
             //console.log(error.status);
-            alert('ng');
+            alert('Login Error');
             localStorage.setItem('isLoggedin', 'false');
         });
         

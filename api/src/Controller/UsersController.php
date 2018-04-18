@@ -6,7 +6,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
 
 // src/Controller/UsersController.php
-class UsersController extends AppController
+class UsersController extends O001Controller
 {
     /**
      * Initialization hook method.
@@ -116,8 +116,9 @@ class UsersController extends AppController
         $menuesTable = TableRegistry::get('menues');
         $menuControlsTable = TableRegistry::get('menuControls');
 
-        //Get Token From Header
-        $token = $this->request->header('X-CSRF-Token');
+        //Get Token
+        $jsonData = $this->request->input('json_decode');
+        $token = $jsonData->token;
         
         //Check Token from DB
         $userData = $this->checkToken($token);
@@ -189,11 +190,9 @@ class UsersController extends AppController
     public function login()
     {
         
-        if (!$this->request->is('post'))
-        {
-            return $this->response->withStatus(405);
-        }
+
         $jsonData = $this->request->input('json_decode');
+      
 
         if (!(isset($jsonData->login) && isset($jsonData->password)) ){
             return $this->response->withStatus(400);
@@ -212,6 +211,7 @@ class UsersController extends AppController
         if (!isset($usersData)){
             return $this->response->withStatus(401);
         }
+        
         //debug($usersData->id);
         //Pass check user login. Set Old token to disable and Insert new token Data
         $userTokensData = $userTokensTable->find('all')
@@ -239,7 +239,7 @@ class UsersController extends AppController
         $this->set('_serialize', ['usersData','token']);
         
     
-    }
+    }//End Function Login
 
    
 }
