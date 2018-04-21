@@ -14,6 +14,9 @@ import { AuthGuard } from './shared';
 import { MyHttpInterceptor } from './service/my-http-interceptor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+//Import My Service
+import { UserDataService, MenuData } from './service/userData.service';
+
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
     // for development
@@ -45,7 +48,8 @@ export function createTranslateLoader(http: HttpClient) {
             provide: HTTP_INTERCEPTORS, 
             useClass: MyHttpInterceptor, 
             multi: true 
-        } 
+        } ,
+        UserDataService
     ],
     bootstrap: [AppComponent]
 })

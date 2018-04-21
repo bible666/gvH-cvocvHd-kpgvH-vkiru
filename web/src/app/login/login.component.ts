@@ -14,8 +14,8 @@ import { UserDataService, MenuData } from '../service/userData.service';
 })
 export class LoginComponent implements OnInit {
 
-    private userService: UserDataService;
-    constructor(public router: Router, private http: HttpClient) {
+    
+    constructor(private userService: UserDataService, public router: Router, private http: HttpClient) {
         this.userService = new UserDataService();
     }
 

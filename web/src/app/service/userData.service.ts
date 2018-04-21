@@ -1,34 +1,36 @@
 
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class UserDataService{
     private user : UserData;
     
-    getMenu():MenuData{
+    public getMenu():MenuData[]{
         let myMenu = localStorage.getItem('menu');
-        let ret : MenuData = JSON.parse(myMenu);
+        console.log(myMenu);
+        let jsonObj  = JSON.parse(myMenu);
+        console.log(jsonObj.menuDatas);
+        let ret: MenuData[]  = jsonObj;
         console.log(ret);
-        return ret;
+        return jsonObj.menuDatas;
     }
 
-    setUser(company_id:number,id : number,name : string,token : string){
-        this.user = new UserData();
-        this.user.userId = id;
-        this.user.userName = name;
-        this.user.token = token;
-        this.user.company_id = company_id;
+    public setUser(company_id:number,id : number,name : string,token : string){
+        localStorage.setItem('userId',id.toString());
+        localStorage.setItem('userName',name);
+        localStorage.setItem('companyId',company_id.toString());
         localStorage.setItem('token',token);
-       // console.log(localStorage.getItem('token'));
     }
 
-    getUserId():number{
+    public getUserId():number{
         return this.user.userId;
     }
 
-    getUserName():string{
-        return this.user.userName;
+    public getUserName():string{
+        return localStorage.getItem('userName');
     }
 
-    getUserToken():string{
+    public getUserToken():string{
         return localStorage.getItem('token');
     }
 }

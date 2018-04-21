@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { UserDataService, MenuData } from '../../../service/userData.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -11,8 +12,14 @@ export class SidebarComponent {
     isActive: boolean = false;
     showMenu: string = '';
     pushRightClass: string = 'push-right';
-
-    constructor(private translate: TranslateService, public router: Router) {
+    menus: any;
+    userName: string;
+    
+    constructor(private userService: UserDataService,private translate: TranslateService, public router: Router) {
+        this.userName = this.userService.getUserName();
+        //get Menu 
+        this.menus = this.userService.getMenu();
+        console.log(this.menus);
         this.translate.addLangs(['en', 'fr', 'ur', 'es', 'it', 'fa', 'de']);
         this.translate.setDefaultLang('en');
         const browserLang = this.translate.getBrowserLang();

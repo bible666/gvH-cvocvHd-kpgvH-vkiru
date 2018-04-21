@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { UserDataService, MenuData } from '../../../service/userData.service';
 
 @Component({
     selector: 'app-header',
@@ -9,9 +10,10 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class HeaderComponent implements OnInit {
     pushRightClass: string = 'push-right';
+    Username: string = "";
 
-    constructor(private translate: TranslateService, public router: Router) {
-
+    constructor(private userService: UserDataService,private translate: TranslateService, public router: Router) {
+        this.Username = this.userService.getUserName();
         this.translate.addLangs(['en', 'fr', 'ur', 'es', 'it', 'fa', 'de', 'zh-CHS']);
         this.translate.setDefaultLang('en');
         const browserLang = this.translate.getBrowserLang();
