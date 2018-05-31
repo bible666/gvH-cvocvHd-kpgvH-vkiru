@@ -11,7 +11,6 @@ import { AppComponent } from './app.component';
 import { AuthGuard } from './shared';
 
 //Import My File
-import { MyHttpInterceptor } from './service/my-http-interceptor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 //Import My Service
@@ -44,11 +43,6 @@ export function createTranslateLoader(http: HttpClient) {
     declarations: [AppComponent],
     providers: [
         AuthGuard,
-        { 
-            provide: HTTP_INTERCEPTORS, 
-            useClass: MyHttpInterceptor, 
-            multi: true 
-        } ,
         UserDataService
     ],
     bootstrap: [AppComponent]
