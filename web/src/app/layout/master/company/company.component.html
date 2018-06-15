@@ -43,14 +43,14 @@
             </thead>
             <tbody>
                 
-                <tr class = "row" *ngFor="let data of jsonObj.datas">
+                <tr class = "row" *ngFor="let data of DataForGrid">
                     <td style="width: 4%">
                         <i class="fa fa-edit fa-2x"></i>
                     </td>
                     <td style="width: 4%">
                         <i class="fa fa-remove fa-2x"></i>
                     </td>
-                    <td style="width: 92%" >{{data.companyName}}</td>
+                    <td style="width: 92%" >{{data.company_name}}</td>
                 </tr>
                 
             </tbody>
