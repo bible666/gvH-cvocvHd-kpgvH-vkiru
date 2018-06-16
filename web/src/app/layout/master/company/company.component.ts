@@ -3,6 +3,8 @@ import { routerTransition } from '../../../router.animations';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
+import { CompanyModelComponent } from './company-modal/company-model.component';
+
 @Component({
     selector: 'app-blank-page',
     templateUrl: './company.component.html',
@@ -41,10 +43,22 @@ export class CompanyComponent implements OnInit {
             this.AllPages.push(i);
         }
         this.CurrentPage = 2;
-        console.log(this.jsonObj);
+        //console.log(this.jsonObj);
     }
 
     ngOnInit() {}
+
+    showAdd(){
+        const activeModal = this.modalService.open(CompanyModelComponent);
+        activeModal.componentInstance.company_id = 20;
+        activeModal.result.then(
+            (result) =>{
+                alert('passl');
+            },(reason) =>{
+                alert('ng');
+            }
+        )
+    }
 }
 
 export class company{
